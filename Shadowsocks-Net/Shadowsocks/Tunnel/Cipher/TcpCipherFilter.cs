@@ -26,7 +26,7 @@ namespace Shadowsocks.Cipher
         {
             _cipher = Throw.IfNull(() => cipher);            
         }
-        public override ClientFilterResult AfterReading(ClientFilterContext ctx)
+        public override ClientFilterResult OnReading(ClientFilterContext ctx)
         {
             SmartBuffer bufferPlain = null;
             if (null != _cipher)
@@ -37,13 +37,13 @@ namespace Shadowsocks.Cipher
                 }
                 else
                 {
-                    _logger?.LogError($"AeadCipherTcpFilter AfterReading filterContext.Memory.IsEmpty");
+                    _logger?.LogError($"AeadCipherTcpFilter OnReading filterContext.Memory.IsEmpty");
                 }
             }
             return new ClientFilterResult(this.Client, bufferPlain, true);//TODO 2           
         }
 
-        public override ClientFilterResult BeforeWriting(ClientFilterContext ctx)
+        public override ClientFilterResult OnWriting(ClientFilterContext ctx)
         {
             ClientFilterResult r = new ClientFilterResult(this.Client, null, false);
             if (null != _cipher)
@@ -55,7 +55,7 @@ namespace Shadowsocks.Cipher
                 }
                 else
                 {
-                    _logger?.LogError($"AeadCipherTcpFilter BeforeWriting filterContext.Memory.IsEmpty");
+                    _logger?.LogError($"AeadCipherTcpFilter OnWriting filterContext.Memory.IsEmpty");
                 }
             }
             return r;

@@ -58,7 +58,7 @@ namespace Shadowsocks.Local
         {
         }
 
-        public override ClientFilterResult AfterReading(ClientFilterContext ctx)
+        public override ClientFilterResult OnReading(ClientFilterContext ctx)
         {
             if (!ctx.Memory.IsEmpty)
             {
@@ -69,12 +69,12 @@ namespace Shadowsocks.Local
                 toApplication.SignificantLength = ctx.Memory.Length + 2 + 1;
                 return new ClientFilterResult(ctx.Client, toApplication, true);
             }
-            else { _logger?.LogError($"LocalUdpRelayPackingFilter AfterReading filterContext.Memory.IsEmpty"); }
+            else { _logger?.LogError($"LocalUdpRelayPackingFilter OnReading filterContext.Memory.IsEmpty"); }
 
             return new ClientFilterResult(this.Client, null, false);
         }
 
-        public override ClientFilterResult BeforeWriting(ClientFilterContext ctx)
+        public override ClientFilterResult OnWriting(ClientFilterContext ctx)
         {
             if (!ctx.Memory.IsEmpty)
             {
@@ -83,7 +83,7 @@ namespace Shadowsocks.Local
                 toRemote.SignificantLength = ctx.Memory.Length - 3;
                 return new ClientFilterResult(ctx.Client, toRemote, true);
             }
-            else { _logger?.LogError($"LocalUdpRelayPackingFilter BeforeWriting filterContext.Memory.IsEmpty"); }
+            else { _logger?.LogError($"LocalUdpRelayPackingFilter OnWriting filterContext.Memory.IsEmpty"); }
 
             return new ClientFilterResult(this.Client, null, false);
         }
